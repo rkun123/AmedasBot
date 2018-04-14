@@ -2,6 +2,8 @@ from twitter import *
 from tokensLoader import Loader
 from scraper import Scraper
 import datetime
+from YesterdayUtil import YesterdayUtil
+from graph import GraphMaker
 
 TEMPLATE = """[飯塚アメダスBot]
 時刻: {0}時
@@ -25,7 +27,18 @@ def tweet():
     timeString = datetime.datetime.today().strftime("%H:%M")
     sc = Scraper()
     data = sc.scrape()
+    yu = YesterdayUtil()
+    yu.update(data)
+    graph = GraphMaker(yu.read()[-1])
+    graph.Graphize()
+
     msg = TEMPLATE.format(data["time"],data["temp"],data["rain"],data["windAngle"],data["windSpeed"],data["sunrisetime"],data["humidity"],data["airplessure"],timeString)
-    print(msg)
+
+    #print(msg)
+    imageFile = open("./output.png","rb").read()
+    params = {"media[]": imageFile, "status":msg}
+    #t.statuses.update_with_media(**params)
+
     #t.statuses.update(status=msg)
+
 tweet()

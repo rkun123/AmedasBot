@@ -4,7 +4,7 @@ from urllib import request
 class Scraper:
     def __init__(self):
         self.URL = "http://www.jma.go.jp/jp/amedas_h/today-82136.html?areaCode=000&groupCode=58"
-    
+
     def scrape(self):
         htmlBody = request.urlopen(self.URL)
         soup = BeautifulSoup(htmlBody,"html.parser")
@@ -24,9 +24,9 @@ class Scraper:
                 res["sunrisetime"] = data[4].get_text()
                 res["humidity"] = data[5].get_text()
                 res["airplessure"] = data[6].get_text()
-                print(res)
+                #print(res)
                 return res
-                
+
 
 
 
