@@ -4,6 +4,7 @@ from scraper import Scraper
 import datetime
 from YesterdayUtil import YesterdayUtil
 from graph import GraphMaker
+import time
 
 TEMPLATE = """[飯塚アメダスBot]
 時刻: {0}時
@@ -23,22 +24,33 @@ auth=OAuth(tokens["TOKEN"],tokens["TOKEN_SECRET"],tokens["CONSUMER"],tokens["CON
 t = Twitter(auth=auth)
 
 
-def tweet():
-    timeString = datetime.datetime.today().strftime("%H:%M")
-    sc = Scraper()
-    data = sc.scrape()
-    yu = YesterdayUtil()
-    yu.update(data)
-    graph = GraphMaker(yu.read()[-1])
-    graph.Graphize()
+def main():
+    #Start time hour.
+    lastHour = datetime.datetime.today().hour
+    #Check on loop(by 30 seconds)
+    while True:
+        print("Start Checking...")
+        sc = Scraper()
+        data = sc.scrape()
+        if lastHour < int(data["time"]):
+            #on updated
+            lastHour = int(data["time"])
+            tweet(data)
+        print("Finish Checking.")
+        #wait 30 seconds
+        time.sleep(30)
 
-    msg = TEMPLATE.format(data["time"],data["temp"],data["rain"],data["windAngle"],data["windSpeed"],data["sunrisetime"],data["humidity"],data["airplessure"],timeString)
-
-    #print(msg)
+#Tweet Function
+def tweet(_data):
+    nowTime = datetime.datetime.today();
+    timeString = nowTime.strftime("%H:%M")
+    msg = TEMPLATE.format(_data["time"],_data["temp"],_data["rain"],_data["windAngle"],_data["windSpeed"],_data["sunrisetime"],_data["humidity"],_data["airplessure"],timeString)
+    print(msg)
     imageFile = open("./output.png","rb").read()
     params = {"media[]": imageFile, "status":msg}
     #t.statuses.update_with_media(**params)
 
     #t.statuses.update(status=msg)
 
-tweet()
+if __name__ == "__main__":
+    main()
