@@ -27,9 +27,15 @@ t = Twitter(auth=auth)
 def main():
     #Start time hour.
     lastHour = datetime.datetime.today().hour
+    lastDay = datetime.datetime.today().day
     #Check on loop(by 30 seconds)
     while True:
         print("Start Checking...")
+        #New day check
+        if lastDay != datetime.datetime.today().day:
+            lastHour = 0;
+            lastday = datetime.datetime.today().day
+        #Load Web
         sc = Scraper()
         data = sc.scrape()
         if lastHour < int(data["time"]):
