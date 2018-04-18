@@ -9,10 +9,10 @@ import time
 TEMPLATE = """[飯塚アメダスBot]
 時刻: {0}時
 気温: {1}℃
-降水量:{2}mm
+降水量: {2}mm
 風向: {3}
 風速: {4}m/s
-日照時間:{5}h
+日照時間: {5}h
 湿度: {6}%
 気圧: {7}hPa
 http://www.jma.go.jp/jp/amedas_h/today-82136.html?areaCode=000&groupCode=58
