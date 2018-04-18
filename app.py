@@ -9,10 +9,10 @@ import time
 TEMPLATE = """[飯塚アメダスBot]
 時刻: {0}時
 気温: {1}℃
-降水量:{2}mm
+降水量: {2}mm
 風向: {3}
 風速: {4}m/s
-日照時間:{5}h
+日照時間: {5}h
 湿度: {6}%
 気圧: {7}hPa
 http://www.jma.go.jp/jp/amedas_h/today-82136.html?areaCode=000&groupCode=58
@@ -26,7 +26,8 @@ t = Twitter(auth=auth)
 
 def main():
     #Start time hour.
-    lastHour = datetime.datetime.today().hour
+    #lastHour = datetime.datetime.today().hour
+    lastHour = 0
     lastDay = datetime.datetime.today().day
     #Check on loop(by 30 seconds)
     while True:
@@ -38,8 +39,10 @@ def main():
         #Load Web
         sc = Scraper()
         data = sc.scrape()
+        print(int(data["time"]))
         if lastHour < int(data["time"]):
             #on updated
+            print("Detect updating")
             lastHour = int(data["time"])
             tweet(data)
         print("Finish Checking.")
@@ -51,12 +54,12 @@ def tweet(_data):
     nowTime = datetime.datetime.today();
     timeString = nowTime.strftime("%H:%M")
     msg = TEMPLATE.format(_data["time"],_data["temp"],_data["rain"],_data["windAngle"],_data["windSpeed"],_data["sunrisetime"],_data["humidity"],_data["airplessure"],timeString)
-    print(msg)
-    imageFile = open("./output.png","rb").read()
-    params = {"media[]": imageFile, "status":msg}
+    #print(str(msg))
+    #imageFile = open("./output.png","rb").read()
+    #params = {"media[]": imageFile, "status":msg}
     #t.statuses.update_with_media(**params)
 
-    #t.statuses.update(status=msg)
+    t.statuses.update(status=msg)
 
 if __name__ == "__main__":
     main()
