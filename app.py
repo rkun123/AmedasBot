@@ -56,7 +56,7 @@ def tweet(_data):
     params = {"media[]": imageFile, "status":msg}
     #t.statuses.update_with_media(**params)
 
-    #t.statuses.update(status=msg)
+    t.statuses.update(status=msg)
 
 if __name__ == "__main__":
     main()
