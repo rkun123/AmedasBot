@@ -26,7 +26,8 @@ t = Twitter(auth=auth)
 
 def main():
     #Start time hour.
-    lastHour = datetime.datetime.today().hour
+    #lastHour = datetime.datetime.today().hour
+    lastHour = 0
     lastDay = datetime.datetime.today().day
     #Check on loop(by 30 seconds)
     while True:
